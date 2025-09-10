@@ -66,3 +66,5 @@ On Windows, the **Rtools** warning can be ignored if binary packages install suc
 
 ## Preview
 ![Trends](docs/p1_trends.png)
+
+![R CI](https://github.com/Wavekin/esg-starter-r/actions/workflows/ci.yml/badge.svg)
