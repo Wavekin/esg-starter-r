@@ -63,3 +63,6 @@ On Windows, the **Rtools** warning can be ignored if binary packages install suc
 - ETF returns vs ESG macro model.
 - R Markdown report (methods & results).
 - Reproducibility via `renv` + CI (GitHub Actions).
+
+## Preview
+![Trends](docs/p1_trends.png)
