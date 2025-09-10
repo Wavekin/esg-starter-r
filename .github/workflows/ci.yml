@@ -1,0 +1,48 @@
+name: R CI
+on: [push, pull_request]
+permissions:
+  contents: write
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - name: Install R packages
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: |
+            any::WDI
+            any::dplyr
+            any::readr
+            any::ggplot2
+            any::tidyr
+            any::shiny
+            any::bslib
+      - name: Run data + plots + OLS
+        run: |
+          Rscript R/01_get_data.R
+          Rscript R/03_plots.R
+          Rscript R/02_analysis.R
+      - name: Upload artifacts (results/)
+        uses: actions/upload-artifact@v4
+        with:
+          name: results
+          path: results/
+      - name: Upload artifacts (data/)
+        uses: actions/upload-artifact@v4
+        with:
+          name: data
+          path: data/
+      - name: Commit preview to docs/
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p docs
+          cp results/p1_trends.png docs/p1_trends.png || true
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add docs/p1_trends.png
+          git commit -m "CI: update preview" || echo "No changes to commit"
+          git push
